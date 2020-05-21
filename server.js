@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 require("dotenv").config();
 const { Sequelize } = require("sequelize");
+const path = require("path");
 
 const sequelize = new Sequelize(
   process.env.DATABASE,
@@ -119,6 +120,12 @@ app.get("/:url", (req, res) => {
   };
 
   return run();
+});
+
+// Static hosting of built React files
+app.use(express.static(path.join(__dirname, "build")));
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "build/index.html"));
 });
 
 const port = 8080;
