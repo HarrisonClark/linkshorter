@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => ({
       '& > *': {
         margin: theme.spacing(1),
         width: '25ch',
-        marginTop: "100px",
+        marginTop: "300px",
       },
     },
   }));
@@ -16,7 +16,7 @@ export default function LinkForm() {
     const classes = useStyles();
     return(
         <form className={classes.root} noValidate autoComplete="off">
-            <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+            <TextField id="outlined-basic" label="Link Shortner" placeholder= "Enter Your Link" variant="outlined" />
         </form>
     ); 
 
