@@ -8,7 +8,6 @@ export default function App() {
   return (
     <Router>
       <Switch>
-        <NavBar/>
         <Route exact path='/' component={Home}/>
         <Route exact path='/analytics' component={Analytics}/>
       </Switch>
