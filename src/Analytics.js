@@ -90,8 +90,11 @@ export default function Analytics() {
             </Typography>
           </Box>
         );
-      } else {
-        return <div> There have been no page views at this URL. </div>;
+      } 
+     else if (pageHits === 0){
+      return <div> There have been no page views at this URL. </div>; 
+     } else {
+        return <div></div>;
       }
   }
 
