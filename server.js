@@ -3,7 +3,6 @@ const app = express();
 require("dotenv").config();
 const { Sequelize } = require("sequelize");
 
-
 const sequelize = new Sequelize(
   process.env.DATABASE,
   process.env.DATABASE_USER,
@@ -20,14 +19,14 @@ const PageHits = sequelize.import(__dirname + "/models/pageHits");
 const run = async () => {
   await sequelize.authenticate();
   console.log("DB Authenticated!");
-  
-  Url.hasMany(PageHits, { as: "pageHits" });
-  PageHits.belongsTo(Tutorial, {
+
+  Urls.hasMany(PageHits, { as: "pageHits" });
+  PageHits.belongsTo(Urls, {
     foreignKey: "id",
     as: "url",
   });
 
-  await sequelize.sync();
+  await sequelize.sync(); //{ force: true } to clear
   console.log("Succesfully synced!");
 };
 
@@ -104,7 +103,11 @@ app.get("/:url", (req, res) => {
       return res.json("FAILED");
     }
 
-    Urls.update({ pageHits: UrlObject.pageHits + 1 }, { where: { shortURL } });
+    Urls.update(
+      { pageHitCount: UrlObject.pageHitCount + 1 },
+      { where: { shortURL } }
+    );
+    PageHits.create({ urlId: UrlObject.id });
     await Urls.sync();
 
     console.log("Redirecting to " + UrlObject.longURL);

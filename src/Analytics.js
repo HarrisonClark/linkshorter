@@ -65,37 +65,33 @@ const useStyles = makeStyles((theme) => ({
 export default function Analytics() {
   const classes = useStyles();
   const [shortURL, setShortURL] = useState("");
-  const [pageHits, setPageHits ] = useState(null); 
+  const [pageHits, setPageHits] = useState(null);
 
   function PageHits(e) {
-    console.log(e)
+    console.log(e);
     e.preventDefault();
-    fetch("/api/info/" + shortURL.substring(15,))
-      .then((res) => 
-            res.json())
-      .then((res) => setPageHits(res.pageHits));
+    fetch("/api/info/" + shortURL.substring(15))
+      .then((res) => res.json())
+      .then((res) => setPageHits(res.pageHitCount));
   }
   const onChange = (e) => {
     setShortURL(e.target.value);
   };
 
-  function ShowPageViews(){
+  function ShowPageViews() {
     if (pageHits) {
-        return (
-          <Box mt={8} display="flex">
-            <Typography>
-              <div> 
-                 Page Views : {pageHits}
-              </div>
-            </Typography>
-          </Box>
-        );
-      } 
-     else if (pageHits === 0){
-      return <div> There have been no page views at this URL. </div>; 
-     } else {
-        return <div></div>;
-      }
+      return (
+        <Box mt={8} display="flex">
+          <Typography>
+            <div>Page Views : {pageHits}</div>
+          </Typography>
+        </Box>
+      );
+    } else if (pageHits === 0) {
+      return <div> There have been no page views at this URL. </div>;
+    } else {
+      return <div></div>;
+    }
   }
 
   return (
@@ -126,7 +122,7 @@ export default function Analytics() {
             color="primary"
             className={classes.submit}
           >
-           Page Views 
+            Page Views
           </Button>
           <Grid container>
             <Grid item>
@@ -142,4 +138,3 @@ export default function Analytics() {
     </Container>
   );
 }
-
