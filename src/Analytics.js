@@ -15,7 +15,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
       <Link color="inherit" href="https://material-ui.com/">
-        Link Shorter
+        Link Shortner
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -62,23 +62,41 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function GoTo() {
+export default function Analytics() {
   const classes = useStyles();
   const [shortURL, setShortURL] = useState("");
+  const [pageHits, setPageHits ] = useState(null); 
 
-  function PageViews(e) {
+  function PageHits(e) {
     console.log(e)
     e.preventDefault();
-    fetch("/api/info/" + shortURL)
-      
+    fetch("/api/info/" + shortURL.substring(15,))
       .then((res) => 
             res.json())
-      .then((res) => setShortURL(res.shortURL));
+      .then((res) => setPageHits(res.pageHits));
   }
   const onChange = (e) => {
     setShortURL(e.target.value);
   };
 
+  function ShowPageViews(){
+    if (pageHits) {
+        return (
+          <Box mt={8} display="flex">
+            <Typography>
+              <div> 
+                 Page Views : {pageHits}
+              </div>
+            </Typography>
+          </Box>
+        );
+      } 
+     else if (pageHits === 0){
+      return <div> There have been no page views at this URL. </div>; 
+     } else {
+        return <div></div>;
+      }
+  }
 
   return (
     <Container className={classes.main} component="main" maxWidth="xs">
@@ -87,7 +105,7 @@ export default function GoTo() {
         <Typography component="h1" variant="h3">
           Analytics
         </Typography>
-        <form className={classes.form} onSubmit={PageViews}>
+        <form className={classes.form} onSubmit={PageHits}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -117,6 +135,7 @@ export default function GoTo() {
           </Grid>
         </form>
       </div>
+      <ShowPageViews />
       <Box mt={8}>
         <Copyright />
       </Box>
