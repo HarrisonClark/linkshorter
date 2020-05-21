@@ -127,6 +127,9 @@ app.use(express.static(path.join(__dirname, "build")));
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "build/index.html"));
 });
+app.get("/api/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build/index.html"));
+});
 
 const port = process.env.PORT || 8080; // Listening for requests on a specific port
 app.listen(port, () => {
