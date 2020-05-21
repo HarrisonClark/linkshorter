@@ -28,9 +28,7 @@ run().catch((error) => console.log(error));
 app.get("/api/create/:url", (req, res) => {
   const longURL = req.params.url;
 
-  let randString =
-    Math.random().toString(36).substring(2, 15) +
-    Math.random().toString(36).substring(2, 15);
+  let randString = Math.random().toString(36).substring(2, 15);
 
   while (!Urls.findAll({ where: { shortURL: randString } })) {
     console.log("BROKEN");
