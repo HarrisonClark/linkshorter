@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Analytics() {
-  const host_url = process.env.HOST_URL || "localhost:8080/";
+  const host_url = process.env.REACT_APP_HOST_URL || "localhost:8080/";
   const classes = useStyles();
   const [shortURL, setShortURL] = useState("");
   const [pageHits, setPageHits] = useState(null);
