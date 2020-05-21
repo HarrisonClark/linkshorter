@@ -128,8 +128,7 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "build/index.html"));
 });
 
-const port = 8080;
-// Listening for requests on a specific port
+const port = process.env.PORT || 8080; // Listening for requests on a specific port
 app.listen(port, () => {
   console.log("Server listening on port 8080");
 });
