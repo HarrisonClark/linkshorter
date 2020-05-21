@@ -66,9 +66,14 @@ export default function GoTo() {
   const classes = useStyles();
   const [shortURL, setShortURL] = useState("");
 
-  function GoToURL(e) {
+  function PageViews(e) {
     console.log(e)
-
+    e.preventDefault();
+    fetch("/api/info/" + shortURL)
+      
+      .then((res) => 
+            res.json())
+      .then((res) => setShortURL(res.shortURL));
   }
   const onChange = (e) => {
     setShortURL(e.target.value);
@@ -82,7 +87,7 @@ export default function GoTo() {
         <Typography component="h1" variant="h3">
           Analytics
         </Typography>
-        <form className={classes.form} onSubmit={GoToURL}>
+        <form className={classes.form} onSubmit={PageViews}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -103,16 +108,7 @@ export default function GoTo() {
             color="primary"
             className={classes.submit}
           >
-            Go to New Link
-          </Button>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Page Views
+           Page Views 
           </Button>
           <Grid container>
             <Grid item>
