@@ -69,19 +69,39 @@ export default function Shorten() {
   const [longURL, setLongURL] = useState("");
   const [advanced, setAdvanced] = useState(false);
   const [desiredURL, setDesiredURL] = useState("");
+  const [error, setError] = useState(false);
 
   function ShortenURL(e) {
     e.preventDefault();
 
     if (advanced) {
       console.log("ADVANCED");
-      fetch("/api/create/" + longURL + "?desiredURL=" + desiredURL)
-        .then((res) => res.json())
-        .then((res) => setShortURL(res.shortURL));
+      const run = async () => {
+        let res = await fetch(
+          "/api/create/" + longURL + "?desiredURL=" + desiredURL
+        );
+        console.log(res);
+        res = await res.json();
+        console.log(res);
+        if (res.status === "TAKEN") {
+          console.log("TAKEN");
+          setError(true);
+        } else {
+          setError(false);
+        }
+        setShortURL(res.shortURL);
+      };
+      run();
     } else {
-      fetch("/api/create/" + longURL)
-        .then((res) => res.json())
-        .then((res) => setShortURL(res.shortURL));
+      const run = async () => {
+        let res = await fetch("/api/create/" + longURL);
+        console.log(res);
+        res = await res.json();
+        console.log(res);
+
+        setShortURL(res.shortURL);
+      };
+      run();
     }
   }
 
@@ -147,19 +167,37 @@ export default function Shorten() {
             autoFocus
           />
           {advanced ? (
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="desiredURL"
-              label="Desired URL"
-              name="desiredURL"
-              autoComplete="desiredURL"
-              onChange={onDesiredChange}
-              value={desiredURL}
-              autoFocus
-            />
+            error ? (
+              <TextField
+                variant="outlined"
+                margin="normal"
+                error={true}
+                helperText="URL Taken"
+                required
+                fullWidth
+                id="desiredURL"
+                label="Desired URL"
+                name="desiredURL"
+                autoComplete="desiredURL"
+                onChange={onDesiredChange}
+                value={desiredURL}
+                autoFocus
+              />
+            ) : (
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="desiredURL"
+                label="Desired URL"
+                name="desiredURL"
+                autoComplete="desiredURL"
+                onChange={onDesiredChange}
+                value={desiredURL}
+                autoFocus
+              />
+            )
           ) : (
             ""
           )}

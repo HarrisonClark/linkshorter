@@ -29,25 +29,39 @@ app.get("/api/create/:url", (req, res) => {
   const longURL = req.params.url;
   const { desiredURL } = req.query;
 
-  let randString;
-  if (desiredURL) {
-    randString = desiredURL;
-    if (!Urls.findAll({ where: { shortURL: randString } })) {
-      res.json({ status: "TAKEN" });
-    }
-  } else {
-    randString = Math.random().toString(36).substring(2, 15);
-    while (!Urls.findAll({ where: { shortURL: randString } })) {
-      console.log("BROKEN");
-      randString =
-        Math.random().toString(36).substring(2, 15) +
-        Math.random().toString(36).substring(2, 15);
-    }
-  }
+  const run = async () => {
+    if (desiredURL) {
+      let taken = await Urls.findOne({ where: { shortURL: desiredURL } });
+      if (taken) {
+        console.log("RETURNING TAKEN");
+        return res.json({ status: "TAKEN", shortURL: "" });
+      } else {
+        Urls.create({ shortURL: desiredURL, longURL });
+        return res.json({
+          status: "SUCCESS",
+          shortURL: "localhost:8080/" + desiredURL,
+        });
+      }
+    } else {
+      let randString = Math.random().toString(36).substring(2, 15);
+      let taken = await Urls.findOne({ where: { shortURL: randString } });
+      console.log(taken);
+      while (taken) {
+        console.log("TAKEN-UPDATING");
+        randString =
+          Math.random().toString(36).substring(2, 15) +
+          Math.random().toString(36).substring(2, 15);
+        taken = await Urls.findOne({ where: { shortURL: randString } });
+      }
 
-  Urls.create({ shortURL: randString, longURL });
-
-  res.json({ status: "SUCCESS", shortURL: "localhost:8080/" + randString });
+      Urls.create({ shortURL: randString, longURL });
+      return res.json({
+        status: "SUCCESS",
+        shortURL: "localhost:8080/" + randString,
+      });
+    }
+  };
+  return run();
 });
 
 app.get("/api/info/:url", (req, res) => {
