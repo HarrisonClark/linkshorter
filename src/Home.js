@@ -16,7 +16,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
       <Link color="inherit" href="https://material-ui.com/">
-        Link Shorter
+        Link Shortner
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -130,7 +130,7 @@ export default function Shorten() {
       <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h3">
-          Link Shorter
+          Link Shortner
         </Typography>
         <form className={classes.form} onSubmit={ShortenURL}>
           <TextField

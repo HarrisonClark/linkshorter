@@ -15,7 +15,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
       <Link color="inherit" href="https://material-ui.com/">
-        Link Shorter
+        Link Shortner
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -70,7 +70,7 @@ export default function Analytics() {
   function PageHits(e) {
     console.log(e)
     e.preventDefault();
-    fetch("/api/info/" + shortURL)
+    fetch("/api/info/" + shortURL.substring(15,))
       .then((res) => 
             res.json())
       .then((res) => setPageHits(res.pageHits));
@@ -91,7 +91,7 @@ export default function Analytics() {
           </Box>
         );
       } else {
-        return <div></div>;
+        return <div> There have been no page views at this URL. </div>;
       }
   }
 
