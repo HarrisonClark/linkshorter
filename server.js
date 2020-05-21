@@ -27,19 +27,27 @@ run().catch((error) => console.log(error));
 
 app.get("/api/create/:url", (req, res) => {
   const longURL = req.params.url;
+  const { desiredURL } = req.query;
 
-  let randString = Math.random().toString(36).substring(2, 15);
-
-  while (!Urls.findAll({ where: { shortURL: randString } })) {
-    console.log("BROKEN");
-    randString =
-      Math.random().toString(36).substring(2, 15) +
-      Math.random().toString(36).substring(2, 15);
+  let randString;
+  if (desiredURL) {
+    randString = desiredURL;
+    if (!Urls.findAll({ where: { shortURL: randString } })) {
+      res.json({ status: "TAKEN" });
+    }
+  } else {
+    randString = Math.random().toString(36).substring(2, 15);
+    while (!Urls.findAll({ where: { shortURL: randString } })) {
+      console.log("BROKEN");
+      randString =
+        Math.random().toString(36).substring(2, 15) +
+        Math.random().toString(36).substring(2, 15);
+    }
   }
 
   Urls.create({ shortURL: randString, longURL });
 
-  res.json({ shortURL: "localhost:8080/" + randString });
+  res.json({ status: "SUCCESS", shortURL: "localhost:8080/" + randString });
 });
 
 app.get("/api/info/:url", (req, res) => {

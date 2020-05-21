@@ -9,6 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useHistory } from "react-router-dom";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 function Copyright() {
   return (
@@ -66,24 +67,62 @@ export default function Shorten() {
   const classes = useStyles();
   const [shortURL, setShortURL] = useState("");
   const [longURL, setLongURL] = useState("");
+  const [advanced, setAdvanced] = useState(false);
+  const [desiredURL, setDesiredURL] = useState("");
 
   function ShortenURL(e) {
     e.preventDefault();
-    fetch("/api/create/" + longURL)
-      .then((res) => res.json())
-      .then((res) => setShortURL(res.shortURL));
+
+    if (advanced) {
+      console.log("ADVANCED");
+      fetch("/api/create/" + longURL + "?desiredURL=" + desiredURL)
+        .then((res) => res.json())
+        .then((res) => setShortURL(res.shortURL));
+    } else {
+      fetch("/api/create/" + longURL)
+        .then((res) => res.json())
+        .then((res) => setShortURL(res.shortURL));
+    }
   }
 
-  const onChange = (e) => {
+  const onShortChange = (e) => {
     setLongURL(e.target.value);
+  };
+
+  const onDesiredChange = (e) => {
+    setDesiredURL(e.target.value);
   };
 
   function ShortURL() {
     if (shortURL) {
-      return <Box mt={8}>{shortURL}</Box>;
+      return (
+        <Box mt={8} display="flex">
+          <Typography>
+            <Link href={shortURL} target="_blank">
+              {shortURL}
+            </Link>
+          </Typography>
+          <CopyToClipboard text={shortURL}>
+            <Button>Copy</Button>
+          </CopyToClipboard>{" "}
+        </Box>
+      );
     } else {
       return <div></div>;
     }
+  }
+
+  function AdvancedOptions() {
+    return (
+      <Button
+        style={{ textTransform: "none" }}
+        onClick={() => setAdvanced((a) => !a)}
+        size="medium"
+        color="primary"
+      >
+        {advanced ? "Random Link" : "Advanced Options"}
+      </Button>
+    );
   }
 
   return (
@@ -103,10 +142,27 @@ export default function Shorten() {
             label="URL To Shorten"
             name="longURL"
             autoComplete="longURL"
-            onChange={onChange}
+            onChange={onShortChange}
             value={longURL}
             autoFocus
           />
+          {advanced ? (
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="desiredURL"
+              label="Desired URL"
+              name="desiredURL"
+              autoComplete="desiredURL"
+              onChange={onDesiredChange}
+              value={desiredURL}
+              autoFocus
+            />
+          ) : (
+            ""
+          )}
           <Button
             type="submit"
             fullWidth
@@ -118,9 +174,7 @@ export default function Shorten() {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
-                Advanced Options
-              </Link>
+              <AdvancedOptions />
             </Grid>
             <Grid item>
               <Analytics />
