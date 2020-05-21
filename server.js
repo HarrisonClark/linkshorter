@@ -47,7 +47,7 @@ app.get("/api/create/:url", (req, res) => {
         Urls.create({ shortURL: desiredURL, longURL });
         return res.json({
           status: "SUCCESS",
-          shortURL: "localhost:8080/" + desiredURL,
+          shortURL: host_url + desiredURL,
         });
       }
     } else {
@@ -65,7 +65,7 @@ app.get("/api/create/:url", (req, res) => {
       Urls.create({ shortURL: randString, longURL });
       return res.json({
         status: "SUCCESS",
-        shortURL: "localhost:8080/" + randString,
+        shortURL: host_url + randString,
       });
     }
   };
@@ -132,6 +132,7 @@ app.get("/api/*", (req, res) => {
 });
 
 const port = process.env.PORT || 8080; // Listening for requests on a specific port
+const host_url = process.env.HOST_URL || "localhost:8080/";
 app.listen(port, () => {
   console.log("Server listening on port 8080");
 });

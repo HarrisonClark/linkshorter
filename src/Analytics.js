@@ -63,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Analytics() {
+  const host_url = process.env.HOST_URL || "localhost:8080/";
   const classes = useStyles();
   const [shortURL, setShortURL] = useState("");
   const [pageHits, setPageHits] = useState(null);
@@ -70,7 +71,8 @@ export default function Analytics() {
   function PageHits(e) {
     console.log(e);
     e.preventDefault();
-    fetch("/api/info/" + shortURL.substring(15))
+    console.log(shortURL.substring(host_url.length));
+    fetch("/api/info/" + shortURL.substring(host_url.length))
       .then((res) => res.json())
       .then((res) => setPageHits(res.pageHitCount));
   }
