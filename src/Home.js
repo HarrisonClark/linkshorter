@@ -8,6 +8,8 @@ import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import { useHistory } from "react-router-dom";
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -18,6 +20,25 @@ function Copyright() {
       {new Date().getFullYear()}
       {"."}
     </Typography>
+  );
+}
+
+function Analytics() {
+  let history = useHistory();
+
+  function pushAnalytics() {
+    history.push("/analytics");
+  }
+
+  return (
+    <Button
+      style={{ textTransform: "none" }}
+      onClick={pushAnalytics}
+      size="medium"
+      color="primary"
+    >
+      Analytics
+    </Button>
   );
 }
 
@@ -102,9 +123,7 @@ export default function Shorten() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
-                {"View Analytics"}
-              </Link>
+              <Analytics />
             </Grid>
           </Grid>
         </form>

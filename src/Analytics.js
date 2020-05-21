@@ -1,58 +1,130 @@
-import React from 'react'; 
-import NavBar from './NavBar'
-import { Box,
-        Grid,
-        Paper,
-        makeStyles } from "@material-ui/core";
+import React, { useState } from "react";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import { useHistory } from "react-router-dom";
 
-import GoToForm from './GoToNewLinkForm'
-
-
-const useStyles = makeStyles(theme => ({
-    root: {
-      flexGrow: 1,
-    },
-    paper: {
-      padding: theme.spacing(2),
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
-    },
-  }));
-
-export default function Analytics(){
-    const classes = useStyles();
-    
-    return(
-        <>
-        <NavBar />
-
-        <div className={classes.root}>
-            <Grid container spacing={1}>
-                
-                <Grid item xs={6}>
-                <Paper className={classes.paper}>
-                    <Box display="flex" justifyContent="center">
-                        <div>
-                            <h1> Go to your new link: </h1>
-                            <GoToForm />
-                        </div>
-                    </Box>
-                </Paper>
-                </Grid>
-                <Grid item xs={6}>
-                <Paper className={classes.paper}>
-                    <Box display="flex" justifyContent="center">
-                        <div>
-                            <h1> View Analytics of Your New Link: </h1>
-                            
-                        </div>
-                    </Box>
-                </Paper>
-                </Grid>
-    
-            </Grid>
-        </div>
-        </>
-        
-    );
+function Copyright() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {"Copyright © "}
+      <Link color="inherit" href="https://material-ui.com/">
+        Link Shorter
+      </Link>{" "}
+      {new Date().getFullYear()}
+      {"."}
+    </Typography>
+  );
 }
+
+function Home() {
+  let history = useHistory();
+
+  function pushHome() {
+    history.push("/");
+  }
+
+  return (
+    <Button
+      style={{ textTransform: "none" }}
+      onClick={pushHome}
+      size="medium"
+      color="primary"
+    >
+      Home
+    </Button>
+  );
+}
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
+
+export default function GoTo() {
+  const classes = useStyles();
+  const [shortURL, setShortURL] = useState("");
+
+  function GoToURL(e) {
+    console.log(e)
+
+  }
+  const onChange = (e) => {
+    setShortURL(e.target.value);
+  };
+
+
+  return (
+    <Container className={classes.main} component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Typography component="h1" variant="h3">
+          Analytics
+        </Typography>
+        <form className={classes.form} onSubmit={GoToURL}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="shortURL"
+            label="Short URL"
+            name="shortURL"
+            autoComplete="shortURL"
+            onChange={onChange}
+            value={shortURL}
+            autoFocus
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Go to New Link
+          </Button>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Page Views
+          </Button>
+          <Grid container>
+            <Grid item>
+              <Home />
+            </Grid>
+          </Grid>
+        </form>
+      </div>
+      <Box mt={8}>
+        <Copyright />
+      </Box>
+    </Container>
+  );
+}
+
