@@ -3,6 +3,7 @@ const app = express();
 require("dotenv").config();
 const { Sequelize } = require("sequelize");
 
+
 const sequelize = new Sequelize(
   process.env.DATABASE,
   process.env.DATABASE_USER,
@@ -14,10 +15,17 @@ const sequelize = new Sequelize(
 );
 
 const Urls = sequelize.import(__dirname + "/models/urls");
+const PageHits = sequelize.import(__dirname + "/models/pageHits");
 
 const run = async () => {
   await sequelize.authenticate();
   console.log("DB Authenticated!");
+  
+  Url.hasMany(PageHits, { as: "pageHits" });
+  PageHits.belongsTo(Tutorial, {
+    foreignKey: "id",
+    as: "url",
+  });
 
   await sequelize.sync();
   console.log("Succesfully synced!");
