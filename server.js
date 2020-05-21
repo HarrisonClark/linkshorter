@@ -33,6 +33,15 @@ const run = async () => {
 
 run().catch((error) => console.log(error));
 
+// Static hosting of built React files
+app.use(express.static(path.join(__dirname, "build")));
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "build/index.html"));
+});
+app.get("/analytics", (req, res) => {
+  res.sendFile(path.join(__dirname, "build/index.html"));
+});
+
 app.get("/api/create/:url", (req, res) => {
   const longURL = req.params.url;
   const { desiredURL } = req.query;
@@ -120,15 +129,6 @@ app.get("/:url", (req, res) => {
   };
 
   return run();
-});
-
-// Static hosting of built React files
-app.use(express.static(path.join(__dirname, "build")));
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "build/index.html"));
-});
-app.get("/api/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "build/index.html"));
 });
 
 const port = process.env.PORT || 8080; // Listening for requests on a specific port

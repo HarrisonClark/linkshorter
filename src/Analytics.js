@@ -9,6 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useHistory } from "react-router-dom";
+import PageHits from "./PageHits";
 
 function Copyright() {
   return (
@@ -68,7 +69,7 @@ export default function Analytics() {
   const [shortURL, setShortURL] = useState("");
   const [pageHits, setPageHits] = useState(null);
 
-  function PageHits(e) {
+  function FetchPageHits(e) {
     console.log(e);
     e.preventDefault();
     console.log(shortURL.substring(host_url.length));
@@ -103,7 +104,7 @@ export default function Analytics() {
         <Typography component="h1" variant="h3">
           Analytics
         </Typography>
-        <form className={classes.form} onSubmit={PageHits}>
+        <form className={classes.form} onSubmit={FetchPageHits}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -134,6 +135,7 @@ export default function Analytics() {
         </form>
       </div>
       <ShowPageViews />
+      <PageHits shortURL={shortURL} />
       <Box mt={8}>
         <Copyright />
       </Box>
